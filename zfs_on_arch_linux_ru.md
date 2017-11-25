@@ -4,7 +4,7 @@
 # и FreeBSD zfs мануалами
 
 # Переход на zfs c работающей системы
-# Соpдаем на новом диске разделы (с помощью fdisk неважно)
+# Создаем на новом диске разделы (с помощью fdisk неважно)
 # Разметка gpt 
 # Если ставить с нуля с CD диска то его надо сделать, вот так. 
 # https://ramsdenj.com/2016/06/23/arch-linux-on-zfs-part-1-embed-zfs-in-archiso.html
@@ -58,7 +58,6 @@ Part     Size   Type
 
 # На рабочей системе ставлю из AUR. Кто хочет может из репозитория. 
 # Если новая установка со сделаного CD, то не надо, потому коммент.
-# Остальное на английском, итак понятно.
 
 
 #yaourt -S zfs-linux
@@ -71,17 +70,17 @@ modprobe zfs
 
 # Создаем пул. Отключаем  неподдерживаемые опции grub и настраиваем производительность.
 
-Безопасный вариант:
+# Безопасный вариант:
+# 
+# sudo zpool create -R /mnt -O mountpoint=none -O atime=off -O relatime=on -O compression=lz4 -o ashift=12   \
+# -o feature@multi_vdev_crash_dump=disabled \
+# -o feature@large_dnode=disabled           \
+# -o feature@sha512=disabled                \
+# -o feature@skein=disabled                 \
+# -o feature@edonr=disabled \
+# tank /dev/disk/by-id/ata-WDC_WDXXXXX-XXXXX_XX-XXXXXXXXX-part2
 
-sudo zpool create -R /mnt -O mountpoint=none -O atime=off -O relatime=on -O compression=lz4 -o ashift=12   \
--o feature@multi_vdev_crash_dump=disabled \
--o feature@large_dnode=disabled           \
--o feature@sha512=disabled                \
--o feature@skein=disabled                 \
--o feature@edonr=disabled \
-tank /dev/disk/by-id/ata-WDC_WDXXXXX-XXXXX_XX-XXXXXXXXX-part2
-
-Мой вариант, который работает в системе, без отключенных фич
+#Мой вариант, который работает в системе, без отключенных фич
 sudo zpool create -R /mnt -O mountpoint=none -O atime=off -O relatime=on -O compression=lz4 -o ashift=12   \
 tank /dev/disk/by-id/ata-WDC_WDXXXXX-XXXXX_XX-XXXXXXXXX-part2 
 
