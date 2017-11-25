@@ -60,15 +60,21 @@ Part     Size   Type
 modprobe zfs
 
 
-# create pool. Disable grub unsupported features and make some tunes
+# create pool. Recommendation of the manual, you must disable grub unsupported features and make some tunes
+
+# sudo zpool create -R /mnt -O mountpoint=none -O atime=off -O relatime=on -O compression=lz4 -o ashift=12   \
+# -o feature@multi_vdev_crash_dump=disabled \
+# -o feature@large_dnode=disabled           \
+# -o feature@sha512=disabled                \
+# -o feature@skein=disabled                 \
+# -o feature@edonr=disabled \
+# tank /dev/disk/by-id/ata-WDC_WDXXXXX-XXXXX_XX-XXXXXXXXX-part2
+
+# But I create without it and pool work
 
 sudo zpool create -R /mnt -O mountpoint=none -O atime=off -O relatime=on -O compression=lz4 -o ashift=12   \
--o feature@multi_vdev_crash_dump=disabled \
--o feature@large_dnode=disabled           \
--o feature@sha512=disabled                \
--o feature@skein=disabled                 \
--o feature@edonr=disabled \
 tank /dev/disk/by-id/ata-WDC_WDXXXXX-XXXXX_XX-XXXXXXXXX-part2
+
 
 # Create fs. Set mountpoint=/ tank/root, other inhirit mountpoints
 zfs create -o mountpoint=/ tank/root
